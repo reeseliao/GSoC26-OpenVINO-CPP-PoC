@@ -10,10 +10,10 @@ int main() {
     cout << "[SYSTEM] OpenVINO GSoC PoC: C++ Native Video Ingestion" << endl;
     cout << "=========================================" << endl;
 
-    // 1. 因为视频和 exe 在同一个文件夹，直接写名字，彻底消灭路径斜杠问题！
+    // path
     string video_path = "test_video.mp4"; 
     
-    // 2. 强行指定使用 Windows 原生的 MSMF 后端解码，不依赖 OpenCV 的外部 FFmpeg
+    // Forcibly specify the use of Windows’ native MSMF backend decoding, without relying on OpenCV’s external FFmpeg.
     VideoCapture cap(video_path);
 
     if (!cap.isOpened()) {
@@ -21,7 +21,7 @@ int main() {
         return -1;
     }
 
-    // 获取视频元数据
+    // Get video metadata
     int total_frames = cap.get(CAP_PROP_FRAME_COUNT);
     double fps = cap.get(CAP_PROP_FPS);
     cout << "[INFO] Video Loaded. Total Frames: " << total_frames << ", FPS: " << fps << endl;
@@ -32,21 +32,20 @@ int main() {
 
     cout << "[INFO] Starting high-performance frame extraction (Interval: " << frame_interval << ")..." << endl;
 
-    // 启动高精度计时器
+    // Start timer
     auto start_time = chrono::high_resolution_clock::now();
 
     for (int i = 0; i < total_frames; i++) {
-        cap >> frame; // 极速读取下一帧
+        cap >> frame; 
         if (frame.empty()) break;
 
         if (i % frame_interval == 0) {
-            // 在实际工程中，这里会把 frame 转为 Tensor 喂给 OpenVINO
-            // 这里我们只是验证抽取逻辑
+            //Here we just verify the extraction logic
             extracted_count++;
         }
     }
 
-    // 停止计时
+    // Stop timing
     auto end_time = chrono::high_resolution_clock::now();
     chrono::duration<double, std::milli> duration = end_time - start_time;
 
