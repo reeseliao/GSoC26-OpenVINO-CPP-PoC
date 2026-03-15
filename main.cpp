@@ -26,7 +26,7 @@ int main() {
     double fps = cap.get(CAP_PROP_FPS);
     cout << "[INFO] Video Loaded. Total Frames: " << total_frames << ", FPS: " << fps << endl;
 
-    int frame_interval = 30; // 每 30 帧抽取一次 (模拟 RAG 关键帧提取)
+    int frame_interval = 30; // Extract every 30 frames 
     int extracted_count = 0;
     Mat frame;
 
